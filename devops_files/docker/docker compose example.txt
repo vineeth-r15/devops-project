@@ -1,0 +1,260 @@
+Docker compose:  
+
+# mkdir composetest
+# cd composetest
+# Create a file app.py as below:
+------------------------------------------------------------------------------------
+import time
+
+import redis
+from flask import Flask
+
+app = Flask(__name__)
+cache = redis.Redis(host='redis', port=6379)
+
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+
+@app.route('/')
+def hello():
+    count = get_hit_count()
+    return 'Hello World! I have been seen {} times.\n'.format(count)
+------------------------------------------------------------------------------------
+
+--> Create another file called requirements.txt as below:
+ # flask
+# redis
+
+--> In your project directory, create a file named Dockerfile
+#----------------------------- 
+syntax=docker/dockerfile:1
+FROM python:3.7-alpine
+WORKDIR /code
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+EXPOSE 5000
+COPY . .
+CMD ["flask", "run"]
+============================
+
+--> Services to compose file:
+Create a file called docker-compose.yml in your project directory and paste the following:
+
+-----------------------------------
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+  redis:
+    image: "redis:alpine"
+
+
++++++++++++++++++++++++++++++++++
+
+-> Build and run your app with Compose
+
+# docker compose up
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+Docker volume: 
+
+--> Create a volume and then configure the container to use it:
+
+# docker volume create hello
+
+
+# docker run -d -v hello:/world busybox ls /world
+
+
+---->  For example, the following creates a tmpfs volume called foo with a size of 100 megabyte and uid of 1000.
+
+
+
+docker volume create --driver local \
+    --opt type=tmpfs \
+    --opt device=tmpfs \
+    --opt o=size=100m,uid=1000 \
+    foo
+
+
+Another example that uses btrfs:
+
+
+
+docker volume create --driver local \
+    --opt type=btrfs \
+    --opt device=/dev/sda2 \
+    foo
+
+
+Command	Description
+docker volume create	Create a volume
+docker volume inspect	Display detailed information on one or more volumes
+docker volume ls	List volumes
+docker volume prune	Remove all unused local volumes
+docker volume rm	Remove one or more volumes
+docker volume update	Update a volume (cluster volumes only)
+
+From <https://docs.docker.com/engine/reference/commandline/volume_create/> 
+
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Docker compose: 
+
+# mkdir composetest
+# cd composetest
+# Create a file app.py as below:
+------------------------------------------------------------------------------------
+import time
+
+import redis
+from flask import Flask
+
+app = Flask(__name__)
+cache = redis.Redis(host='redis', port=6379)
+
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+
+@app.route('/')
+def hello():
+    count = get_hit_count()
+    return 'Hello World! I have been seen {} times.\n'.format(count)
+------------------------------------------------------------------------------------
+
+--> Create another file called requirements.txt as below:
+ # flask
+# redis
+
+--> In your project directory, create a file named Dockerfile
+#----------------------------- 
+syntax=docker/dockerfile:1
+FROM python:3.7-alpine
+WORKDIR /code
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+EXPOSE 5000
+COPY . .
+CMD ["flask", "run"]
+============================
+
+--> Services to compose file:
+Create a file called docker-compose.yml in your project directory and paste the following:
+
+-----------------------------------
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+  redis:
+    image: "redis:alpine"
+----------------------------------
+
+--> Build and run your app with Compose
+
+# docker compose up
+
+
+
+
+
+
+
+
+
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Docker Swarm:
+# docker swarm init --advertise-addr <Server IP address>
+
+madan@madan-virtual-machine:~$ docker swarm init --advertise-addr 192.168.1.7
+Swarm initialized: current node (kml5cngkmgyy8z3pq1kzjkrov) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-0bwlosi553ul392ri48bm0zmyp1stptnae0rmix1i77cuznqx9-399xqhbujuso7wprs3muwhv37 192.168.1.7:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+madan@madan-virtual-machine:~$ docker node ls
+ID                            HOSTNAME                STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+kml5cngkmgyy8z3pq1kzjkrov *   madan-virtual-machine   Ready     Active         Leader           23.0.1
+
+
+
+# Allow ports in both master and worker VM:
+sudo ufw allow from any to any port 2377 proto tcp
+
+
+In worker node:
+# docker swarm join --token SWMTKN-1-0bwlosi553ul392ri48bm0zmyp1stptnae0rmix1i77cuznqx9-399xqhbujuso7wprs3muwhv37 192.168.1.7:2377
+
+
+
+
+# In master VM:
+
+# docker node ls
+
+madan@madan-virtual-machine:~$ docker node ls
+ID                            HOSTNAME                 STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+35bbbptsy3b14uc0vauh6ccov     devops-virtual-machine   Ready     Active                          23.0.1
+kml5cngkmgyy8z3pq1kzjkrov *   madan-virtual-machine    Ready     Active         Leader           23.0.1
+madan@madan-virtual-machine:~$
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+Testing:]
+
+Create Nginx service
+# sudo docker service create --name web-server --publish 8084:80 nginx:latest
+
+Verify status of deployment
+# docker service ls
+
+
+# Scale up:
+docker service scale web-server=3

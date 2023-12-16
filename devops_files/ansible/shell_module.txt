@@ -1,0 +1,36 @@
+
+
+cat multiple-shell-command-playbook
+
+
+---
+- name: Ansible playbook to run shell commands
+  hosts: all
+  become: yes
+  tasks:
+    - name: Execute multiple shell commands
+      shell: ./somescript.sh >> /home/ubuntu/shell/somelog.txt
+      args:
+        chdir: /home/ubuntu/shell
+        creates: somelog.txt
+    - name: Execute multiple shell commands
+      shell: free -m >> /home/ubuntu/shell/memory.txt
+
+
+---------------------------------------------------------------------
+
+cat shell-command-playbook
+
+
+---
+- name: Ansible playbook to run shell commands
+  hosts: all
+  become: yes
+  tasks:
+    - name: Execute shell commands
+      # You can also use the 'args' form to provide the options.
+      shell: ./somescript.sh >> /home/ubuntu/shell/somelog.txt
+      args:
+        chdir: /home/ubuntu/shell
+        creates: somelog.txt
+ubuntu@ansible-master:~/ansible/shell$

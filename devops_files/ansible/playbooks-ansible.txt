@@ -1,0 +1,70 @@
+Sample adhoc commands:
+# ansible all -a "df -h" 
+# ansible worker1 -a "df -h" 
+# ansible workers -a "uptime" 
+
+
+Show sample playbooks:
+
+	1. Package module: Install package
+madan@madan-virtual-machine:~/ansible/package$ cat package-playbook.yaml
+---
+- name: Ansible playbook to install package
+  hosts: worker1
+  become: yes
+  tasks:
+    - name: Install apache httpd  (state=present is optional)
+      apt:
+        name: apache2
+        state: present
+
+
+
+
+	3. File module (copy)
+	madan@madan-virtual-machine:~/ansible/package$ cat ../file/copy-palybook.yaml
+	---
+	- name: Ansible playbook to copy files
+	  hosts: worker1
+	  become: yes
+	  tasks:
+	    - name: Copy file with owner and permissions
+	      copy:
+	        src: /home/madan/ansible/file/acl-playbook.yaml
+	        dest: /tmp/ansible/
+	        owner: joe
+	        group: joe
+	        mode: '0644'
+
+
+
+
+
+Ansible variables:
+madan@madan-virtual-machine:~/ansible/variable$ ansible-playbook variable-useradd-playbook.yaml --extra-vars "username=joe"
+
+madan@madan-virtual-machine:~/ansible/variable$ cat variable-useradd-playbook.yaml
+- name: Simple Variable to add user
+  hosts: worker1
+  become: yes
+  vars:
+    username: "{{ username }}"
+
+  tasks:
+  - name: Add the user {{ username }}
+    ansible.builtin.user:
+      name: "{{ username }}"
+      state: present
+
+
+
+
+Import multiple playbooks:
+
+madan@madan-virtual-machine:~/ansible/multi-playbook$ cat main.yaml
+---
+
+- import_playbook: acl-playbook.yaml
+- import_playbook: copy-playbook.yaml
+- import_playbook: package-playbook.yamlt
+
