@@ -1,0 +1,118 @@
+kubectl apply -f configmap.yaml
+-------------------------------
+apiVersion: v1
+data:
+  redis-config: |
+    maxmemory 2mb
+    maxmemory-policy allkeys-lru
+kind: ConfigMap
+metadata:
+  creationTimestamp: 2016-03-30T18:14:41Z
+  name: redis-config
+  namespace: default
+  resourceVersion: "24686"
+  selfLink: /api/v1/namespaces/default/configmaps/example-redis-config
+  uid: 460a2b6e-f6a3-11e5-8ae5-42010af00002
+---------------------------------------
+
+
+
+
+
+kubectl apply -f redis.yaml
+------------------------------
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cps-redis-pv-volume
+  labels:
+    type: local
+    app: cps-redis
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+ #   server:
+    path: "/data/redis"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cps-redis-claim
+  labels:
+    app: cps-redis
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cps-redis
+  name: redis-service
+  namespace: defaultvi 
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6379
+  selector:
+    app: cps-redis
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    name: cps-redis
+    component: cache
+  name: cps-redis
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cps-redis
+  template:
+    metadata:
+      labels:
+        name: cps-redis
+        component: cache
+    spec:
+      containers:
+      - name: cps-redis
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+          name: cps-redis
+        envFrom:
+          - configMapRef:
+              name: redis-config
+        volumeMounts:
+        - mountPath: /data/redis
+          name: cps-redis-pv-volume
+      volumes:
+        - name: cps-redis-pv-volume
+          persistentVolumeClaim:
+            claimName: cps-redis
+----------------------------
+Check the PV, PVC , Service and statefulset with below commands
+kubectl get pv cps-redis-pv-volume
+kubectl get pvc cps-redis
+kubectl get svc redis-service
+kubectl get statefulset cps-redis
+
+ kubectl logs -f cps-redis-0
+1:C 01 Apr 2023 16:48:09.864 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 01 Apr 2023 16:48:09.864 # Redis version=7.0.10, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 01 Apr 2023 16:48:09.864 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1:M 01 Apr 2023 16:48:09.865 * monotonic clock: POSIX clock_gettime
+1:M 01 Apr 2023 16:48:09.866 * Running mode=standalone, port=6379.
+1:M 01 Apr 2023 16:48:09.867 # Server initialized
+1:M 01 Apr 2023 16:48:09.868 * Ready to accept connection

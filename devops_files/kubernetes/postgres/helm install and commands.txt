@@ -1,0 +1,160 @@
+Helm install
+
+$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+
+
+
+==================================
+
+
+
+Folder structure:
+$ tree
+.
+├── Chart.yaml
+├── storage.yaml
+├── templates
+│   └── redis.yaml
+└── values.yaml
+
+
+
+
+
+----------------
+
+Chart.yaml
+----------------------------------------
+apiVersion: v1
+name: redis
+description: A Helm chart for Redis
+appVersion: "1.0"
+version: 1.0.1
+
+-----------------------------------------
+
+
+
+
+
+storage.yaml
+----------------------------------------
+----------------
+
+
+
+
+
+
+
+
+
+
+
+
+templates/redis.yaml
+----------------------
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cps-redis-pv-volume
+  labels:
+    type: local
+    app: cps-redis
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+ #   server:
+    path: "/data/redis"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cps-redis
+  labels:
+    app: cps-redis
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+--------------------
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    name: cps-redis
+    component: cache
+  name: cps-redis
+  namespace: default
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: cps-redis
+  template:
+    metadata:
+      labels:
+        name: cps-redis
+        component: cache
+    spec:
+      containers:
+      - name: cps-redis
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+          name: cps-redis
+        envFrom:
+          - configMapRef:
+              name: redis-config
+        volumeMounts:
+        - mountPath: /data/redis
+          name: {{ .Values.volumemountpath }}
+      volumes:
+        - name: cps-redis-pv-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumeclaimName }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cps-redis
+  name: redis-service
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6379
+  selector:
+    app: cps-redis
+
+
+
+--------------------------------------------------------
+commands:
+
+helm install redis .
+
+
+values.yaml
+----------------
+release: release-1.0.1
+
+
+app: cps-redis
+replicaCount: 1
+
+volumemountpath: cps-redis-pv-volume
+volumeclaimName: cps-redis
+
+

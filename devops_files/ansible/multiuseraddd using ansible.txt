@@ -1,0 +1,26 @@
+ubuntu@ansible-master:~/useradd$ cat multipleuseradd.yaml
+---
+- name: Playbook to add multiple users
+  hosts: all
+  become: true
+  vars_files:
+      - /home/ubuntu/useradd/vars.yaml
+  tasks:
+      - name: more complex items to add several users
+        user:
+         name: "{{ item.name }}"
+         uid: "{{ item.uid }}"
+         groups: "{{ item.groups }}"
+         state: present
+        with_items: "{{ user_details }}"
+ubuntu@ansible-master:~/useradd$
+ubuntu@ansible-master:~/useradd$
+ubuntu@ansible-master:~/useradd$ cat vars.yaml
+ user_details:
+      - {name: 'testuser5', uid: 1015, groups: ['admin', 'ubuntu']}
+      - {name: 'testuser6', uid: 1016, groups: ['ubuntu']}
+ubuntu@ansible-master:~/useradd$
+
+
+
+ansible-playbook multipleuseradd.yaml -e vars.yaml

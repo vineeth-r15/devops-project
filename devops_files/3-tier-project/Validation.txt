@@ -1,0 +1,4 @@
+kubectl port-forward --address 172.31.87.82 svc/webapp-service 3000:3000
+
+
+Now open browser and search with ec2 instance IP:3000

@@ -1,0 +1,110 @@
+ubuntu@ansible-master:~/ansible$ cat package-playbook.yaml
+---
+- name: Ansible playbook to install package
+  hosts: ansible-worker1
+  become: yes
+  tasks:
+    - name: Install apache httpd
+      apt:
+        name: apache2
+        state: present
+
+
+
+============================================================
+
+
+ubuntu@ansible-master:~/ansible$ cat copy-playbook.yaml
+---
+- name: Ansible playbook to copy files
+  hosts: all
+  become: yes
+  tasks:
+    - name: Copy file with owner and permissions
+      copy:
+        src: /home/ubuntu/ansible/package-playbook.yaml
+        dest: /tmp/
+        owner: joe
+        group: joe
+        mode: '0666'
+
+
+
+=============================================================
+
+ubuntu@ansible-master:~/ansible/shell$ cat shell-command-playbook
+---
+- name: Ansible playbook to run shell commands
+  hosts: all
+  become: yes
+  tasks:
+    - name: Execute shell commands
+      # You can also use the 'args' form to provide the options.
+      shell: ./somescript.sh >> /home/ubuntu/shell/somelog.txt
+      args:
+        chdir: /home/ubuntu/shell
+        creates: somelog.txt
+
+====================================================================
+
+ubuntu@ansible-master:~/ansible/shell$ cat multiple-shell-command-playbook
+---
+- name: Ansible playbook to run shell commands
+  hosts: all
+  become: yes
+  tasks:
+    - name: Execute multiple shell commands
+      shell: ./somescript.sh >> /home/ubuntu/shell/somelog.txt
+      args:
+        chdir: /home/ubuntu/shell
+        creates: somelog.txt
+    - name: Execute multiple shell commands
+      shell: free -m >> /home/ubuntu/shell/memory.txt
++===============================================================
+
+ubuntu@ansible-master:~/ansible/handlers$ cat handlers-ok-ansible-playbook.yaml
+---
+- name: Verify apache installation
+  hosts: all
+  become: yes
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: ubuntu
+  tasks:
+    - name: Ensure apache is at the latest version
+      apt:
+        update_cache: yes
+        name: apache2
+        state: present
+
+
+    - name: Ensure apache is running
+      apt:
+        name: apache2
+        state: fixed
+      notify:
+        - Restart apache
+
+  handlers:
+    - name: Restart apache
+      apt:
+        name: apache2
+        state: restarted
+==============================================================
+
+ubuntu@ansible-master:~/ansible/multi-playbook$ cat main.yaml
+---
+
+- import_playbook: copy-playbook.yaml
+  #- import_playbook: acl-playbook.yaml
+- import_playbook: package-playbook.yaml
+
+
+============================================
+
+
+
+
+
+

@@ -1,0 +1,241 @@
+Git basic questions:
+
+1. What is GIT?
+Answer: GIT is a source code management(SCM) for tracking changes in computer files and is used to help coordinate work among several people on a project while tracking progress over time. In other words, it’s a tool that facilitates source code management in software development.
+
+2. What do you understand by the term ‘Version Control System’?
+Answer: A version control system (VCS) records all the changes made to a file or set of data, so a specific version may be called later if needed.
+       This helps ensure that all team members are working on the latest version of the file
+
+3. What is GitHub?
+Answer: To provide Internet hosting for version control and software development, GitHub makes use of Git. 
+
+
+4. Different types of version control systems
+Answer: Local version control systems have a database that stores all file changes under revision control on disc in a special format.
+Centralized version control systems have a single repository, from which each user receives their working copy.
+Distributed version control systems contain multiple repositories, and different users can access each one with their working copy.
+
+
+5. Mention some popular Git hosting services.
+GitHub
+SourceForge
+GitLab
+Bitbucket
+
+6. What benefits come with using GIT?
+Data replication and redundancy are both possible.
+It is a service with high availability.
+There can only be one Git directory per repository.
+Excellent network and disc performance are achieved.
+On any project, collaboration is very simple.
+
+
+7. What’s the difference between Git and GitHub?
+Answer: Git: Git is a software
+Git can be installed locally on the system
+Provides a desktop interface called git GUI
+It does not support user management features
+
+
+GitHub : GitHub is a service
+GitHub is hosted on the web
+Provides a desktop interface called GitHub Desktop.
+Provides built-in user management
+
+
+
+8. What is a Git repository?
+Git repository refers to a place where all the Git files are stored. These files can either be stored on the local repository or on the remote repository.
+
+
+
+9. How can you initialize a repository in Git?
+If you want to initialize an empty repository to a directory in Git, you need to enter the git init command. After this command, a hidden .git folder will appear.
+
+
+Top 100+ Git Interview Questions and Answers [2023 Edition]
+Lesson 11 of 11By Sana Afreen
+
+Last updated on Jan 13, 2023352015
+Top 100+ Git Interview Questions and Answers [2023 Edition]
+Previous
+Table of Contents
+What Is Git and Why Is It Used?Basic Git Interview QuestionsIntermediate Git Interview QuestionsPopular Git Interview QuestionsAdvanced Git Interview QuestionsView More
+Git is the most popular source code management tool. Whether you're a programmer or a non-technical person, Git will help you with its collaboration features like bug tracking, task management, and wikis. 
+
+Git plays a significant role in an organization to implement DevOps methodologies. Looking at the popularity of Git in DevOps, it's quite evident that there will be many job opportunities in the near future. According to a report from Grand View Research, the global DevOps market is expected to reach 12.85 Bn by 2025, growing at a CAGR of 18.60%. Here are some of the top Git interview questions that will help you crack an interview.
+
+Prepare to Answer all the Questions!
+Caltech Program in DevOpsEXPLORE PROGRAMPrepare to Answer all the Questions!
+What Is Git and Why Is It Used?
+Git is an open-distributed version control system that allows developers to track changes to their codebase and collaborate on projects with other developers. Git is typically used for software development, but it can be used for any type of file.
+
+When a developer makes a change to a code file, they can commit that change to their local Git repository. Then, they can push their changes to a remote Git repository, such as a server hosted by a company or an open-source project. Other developers can then pull the changes down from the remote repository and incorporate them into their code.
+
+And an important thing about Git is that it is a free source and open to anyone.
+
+Basic Git Interview Questions
+1. What is Git?
+Git is a version control system for tracking changes in computer files and is used to help coordinate work among several people on a project while tracking progress over time. In other words, it’s a tool that facilitates source code management in software development.
+
+Git favors both programmers and non-technical users by keeping track of their project files. It enables multiple users to work together and handles large projects efficiently.
+
+git-1
+
+2. What do you understand by the term ‘Version Control System’?
+A version control system (VCS) records all the changes made to a file or set of data, so a specific version may be called later if needed.
+
+This helps ensure that all team members are working on the latest version of the file
+
+server
+
+3. What is GitHub?
+   To provide Internet hosting for version control and software development, GitHub makes use of Git. 
+
+4. Mention some popular Git hosting services.
+GitHub
+SourceForge
+GitLab
+Bitbucket
+5. Different types of version control systems
+Local version control systems have a database that stores all file changes under revision control on disc in a special format.
+Centralized version control systems have a single repository, from which each user receives their working copy.
+Distributed version control systems contain multiple repositories, and different users can access each one with their working copy.
+6. What benefits come with using GIT?
+Data replication and redundancy are both possible.
+It is a service with high availability.
+There can only be one Git directory per repository.
+Excellent network and disc performance are achieved.
+On any project, collaboration is very simple.
+7. What’s the difference between Git and GitHub?
+Git
+
+GitHub
+
+Git is a software
+
+GitHub is a service
+
+Git can be installed locally on the system
+
+GitHub is hosted on the web
+
+Provides a desktop interface called git GUI
+
+Provides a desktop interface called GitHub Desktop.
+
+It does not support user management features
+
+Provides built-in user management
+
+Get Certified in DevOps with Caltech CTME
+Free Webinar | Watch the WebcastEXPLORE NOW!Get Certified in DevOps with Caltech CTME
+8. What is a Git repository?
+Git repository refers to a place where all the Git files are stored. These files can either be stored on the local repository or on the remote repository.
+
+git-repo
+
+9. How can you initialize a repository in Git?
+If you want to initialize an empty repository to a directory in Git, you need to enter the git init command. After this command, a hidden .git folder will appear.
+
+
+10. Name a few Git commands with their function.
+Git config - Configure the username and email address
+Git add - Add one or more files to the staging area
+Git diff - View the changes made to the file
+Git init - Initialize an empty Git repository
+Git status - Check file/folders status
+Git commit - Commit changes to head but not to the remote repository
+
+
+11. What is the correct syntax to add a message to a commit?
+ git commit -m "x files created"
+
+12. Which command is used to create an empty Git repository?
+git init - This command helps to create an empty repository while working on a project. 
+
+13. What does git pull origin master do?
+The git pull origin master fetches all the changes from the master branch onto the origin and integrates them into the local branch.
+
+git pull = git fetch + git merge origin/ master
+
+
+
+_______________________________________________________________________________________________________________________________________
+
+
+
+Git advanced qq:
+14.  What does the git push command do?
+Answer: The Git push command is used to push the content in a local repository to a remote repository. After a local repository has been modified, a push is executed to share the modifications with remote team members.
+
+
+
+15. Difference between git fetch and git pull.
+
+Git Fetch
+The Git fetch command only downloads new data from a remote repository
+It does not integrate any of these new data into your working files.
+Command - git fetch origin
+git fetch --all
+
+
+Git Pull
+Git pull updates the current HEAD branch with the latest changes from the remote server.
+Downloads new data and integrate it with the current working files.
+Tries to merge remote changes with your local ones.
+
+Command - git pull origin master
+
+
+
+16: What do you understand about the Git merge conflict?
+A Git merge conflict is an event that occurs when Git is unable to resolve the differences in code between the two commits automatically. 
+
+Git is capable of automatically merging the changes only if the commits are on different lines or branches.
+
+
+17. How do you resolve conflicts in Git?
+Here are the steps that will help you resolve conflicts in Git:
+
+Identify the files responsible for the conflicts.
+Implement the desired changes to the files 
+Add the files using the git add command.
+The last step is to commit the changes in the file with the help of the git commit command.
+
+
+18. What is the process to revert a commit that has already been pushed and made public?
+There are two processes through which you can revert a commit:
+
+a. Remove or fix the bad file in a new commit and push it to the remote repository. Then commit it to the remote repository using:
+
+git commit –m “commit message”
+
+b. Create a new commit to undo all the changes that were made in the bad commit. Use the following command:
+
+git revert <commit id>
+
+19. What is Git stash?
+Let’s say you're a developer and you want to switch branches to work on something else. The issue is you don’t want to make commits in uncompleted work, so you just want to get back to this point later. The solution here is the Git stash. 
+
+Git stash takes your modified tracked files and saves it on a stack of unfinished changes that you can reapply at any time. To go back to the work you can use the stash pop.
+
+
+20. Explain these commands one by one– git status, git log, git diff, git revert <commit>,  git reset <file>.
+Git status - It shows the current status of the working directory and the staging area.
+Git revert<commit> -  It is used for undoing changes to a repository's commit history.
+Git log- It is a key tool for reviewing and reading the history of everything that happens to a repository.
+Git diff- It is a multi-purpose Git command that performs a diff function on Git data sources when executed.
+Git reset<file>- it is used to unstage a file.
+
+
+
+21. What exactly is forking in Git?
+It is a repository duplicate and forking allows one to experiment with changes without being concerned about the original project. 
+
+22. How to change any older commit messages?
+You can change the most recent commit message with the git commit —amend command.
+
+23. Difference between head, working tree, and index.
+They are all names for various branches. Even Though a single git repository can track an arbitrary number of branches, the working tree is only associated with one of them, and HEAD points to that branch.
